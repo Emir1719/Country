@@ -3,11 +3,13 @@ import android.view.LayoutInflater
 import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.emirozturk.country.R
 import com.emirozturk.country.adapter.CountryAdapter.ViewHolder
 import com.emirozturk.country.model.Country
+import com.emirozturk.country.util.getImageFromUrl
 
 class CountryAdapter(private val list: ArrayList<Country>): RecyclerView.Adapter<ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -27,6 +29,7 @@ class CountryAdapter(private val list: ArrayList<Country>): RecyclerView.Adapter
     override fun onBindViewHolder(holder: ViewHolder, i: Int) {
         holder.itemView.findViewById<TextView>(R.id.textCountryName).setText(list.get(i).name)
         holder.itemView.findViewById<TextView>(R.id.textCountryRegion).setText(list.get(i).region)
+        holder.itemView.findViewById<ImageView>(R.id.imageCountry).getImageFromUrl(list.get(i).url, holder.itemView.context)
     }
 
     fun updateList(newList: ArrayList<Country>) {
