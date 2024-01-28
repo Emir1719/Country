@@ -27,12 +27,21 @@ class FeedFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(FeedViewModel::class.java)
         viewModel.refleshData()
 
+        adapter = CountryAdapter(arrayListOf())
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = adapter
+
+        binding.refleshLayout.setOnRefreshListener {
+            binding.recyclerView.visibility = View.GONE
+            binding.textError.visibility = View.GONE
+            binding.progressCountryLoading.visibility = View.VISIBLE
+            binding.refleshLayout.isRefreshing = false
+            viewModel.refleshData()
+        }
         observeData()
     }
 
-    protected fun observeData() {
+    private fun observeData() {
         viewModel.countries.observe(viewLifecycleOwner) {
             it?.let {
                 binding.recyclerView.visibility = View.VISIBLE
