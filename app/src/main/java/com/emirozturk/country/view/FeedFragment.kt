@@ -36,7 +36,7 @@ class FeedFragment : Fragment() {
             binding.textError.visibility = View.GONE
             binding.progressCountryLoading.visibility = View.VISIBLE
             binding.refleshLayout.isRefreshing = false
-            viewModel.refleshData()
+            viewModel.refleshDataFromApi()
         }
         observeData()
     }

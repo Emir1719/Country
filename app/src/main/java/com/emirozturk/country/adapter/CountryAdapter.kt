@@ -32,7 +32,7 @@ class CountryAdapter(private val list: ArrayList<Country>): RecyclerView.Adapter
         holder.itemView.findViewById<ImageView>(R.id.imageCountry).getImageFromUrl(list.get(i).url, holder.itemView.context)
     }
 
-    fun updateList(newList: ArrayList<Country>) {
+    fun updateList(newList: List<Country>) {
         list.clear()
         list.addAll(newList)
         notifyDataSetChanged()
