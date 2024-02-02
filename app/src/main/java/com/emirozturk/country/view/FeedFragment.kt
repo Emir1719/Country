@@ -4,10 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.emirozturk.country.R
 import com.emirozturk.country.adapter.CountryAdapter
 import com.emirozturk.country.databinding.FragmentFeedBinding
 import com.emirozturk.country.viewmodel.FeedViewModel
@@ -25,7 +23,7 @@ class FeedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(FeedViewModel::class.java)
-        viewModel.refleshData()
+        viewModel.refreshData()
 
         adapter = CountryAdapter(arrayListOf())
         binding.recyclerView.layoutManager = LinearLayoutManager(context)

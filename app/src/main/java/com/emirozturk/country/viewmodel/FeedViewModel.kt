@@ -2,7 +2,6 @@ package com.emirozturk.country.viewmodel
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.emirozturk.country.model.Country
 import com.emirozturk.country.service.CountryApiService
 import com.emirozturk.country.service.CountryDatabase
@@ -20,11 +19,11 @@ class FeedViewModel(app: Application): BaseViewModel(app) {
     private val api = CountryApiService()
     private val disposable = CompositeDisposable()
     private val sharedPreferences = AppSharedPreferences(getApplication())
-    private val refleshTime = 10 * 60 * 1000 * 1000 * 1000L //10 dakika
+    private val refreshTime = 10 * 60 * 1000 * 1000 * 1000L //10 dakika
 
-    fun refleshData() {
+    fun refreshData() {
         val updateTime = sharedPreferences.getTime()
-        if (updateTime != null && updateTime != -1L && (System.nanoTime()-updateTime)<refleshTime) {
+        if ((updateTime != null) && (updateTime != -1L) && ((System.nanoTime() - updateTime.toLong()) < refreshTime)) {
             getDataFromSQLite()
         }
         else {
@@ -60,8 +59,15 @@ class FeedViewModel(app: Application): BaseViewModel(app) {
     private fun getDataFromSQLite() {
         launch {
             val countries = CountryDatabase(getApplication()).countryDao().getAllCountry()
-            showCountry(countries.value!!)
-            Toast.makeText(getApplication(), "From SQLite", Toast.LENGTH_SHORT).show()
+            println(countries.value)
+            countries.value?.let {
+                println("1")
+                showCountry(it)
+                Toast.makeText(getApplication(), "From SQLite", Toast.LENGTH_SHORT).show()
+            } ?: run {
+                println("2")
+                getDataFromApi()
+            }
         }
     }
 
@@ -84,5 +90,10 @@ class FeedViewModel(app: Application): BaseViewModel(app) {
             showCountry(list)
         }
         sharedPreferences.saveTime(System.nanoTime())
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposable.clear()
     }
 }

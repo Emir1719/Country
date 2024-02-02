@@ -1,24 +1,24 @@
 package com.emirozturk.country.adapter
 import android.view.LayoutInflater
-import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.emirozturk.country.R
 import com.emirozturk.country.adapter.CountryAdapter.ViewHolder
+import com.emirozturk.country.databinding.ItemCountryBinding
 import com.emirozturk.country.model.Country
-import com.emirozturk.country.util.getImageFromUrl
+import com.emirozturk.country.view.FeedFragmentDirections
 
-class CountryAdapter(private val list: ArrayList<Country>): RecyclerView.Adapter<ViewHolder>() {
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
+class CountryAdapter(private val list: ArrayList<Country>): RecyclerView.Adapter<ViewHolder>(), OnTabListener {
+    class ViewHolder(view: ItemCountryBinding) : RecyclerView.ViewHolder(view.root) {
+        val binding = view
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.item_country, parent, false)
+        val view = ItemCountryBinding.inflate(inflater, parent, false)
         return ViewHolder(view)
     }
 
@@ -27,14 +27,19 @@ class CountryAdapter(private val list: ArrayList<Country>): RecyclerView.Adapter
     }
 
     override fun onBindViewHolder(holder: ViewHolder, i: Int) {
-        holder.itemView.findViewById<TextView>(R.id.textCountryName).setText(list.get(i).name)
-        holder.itemView.findViewById<TextView>(R.id.textCountryRegion).setText(list.get(i).region)
-        holder.itemView.findViewById<ImageView>(R.id.imageCountry).getImageFromUrl(list.get(i).url, holder.itemView.context)
+        holder.binding.country = list[i]
+        holder.binding.listener = this
     }
 
     fun updateList(newList: List<Country>) {
         list.clear()
         list.addAll(newList)
         notifyDataSetChanged()
+    }
+
+    override fun onTab(view: View) {
+        val id = view.findViewById<TextView>(R.id.textId).text.toString()
+        val action = FeedFragmentDirections.actionFeedFragmentToCountryFragment(id.toInt())
+        Navigation.findNavController(view).navigate(action)
     }
 }

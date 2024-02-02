@@ -1,14 +1,15 @@
 package com.emirozturk.country.util
 import android.content.Context
 import android.widget.ImageView
+import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.emirozturk.country.R
 
-fun ImageView.getImageFromUrl(url: String?, context: Context) {
+fun ImageView.getImageFromUrl(url: String?) {
     val options = RequestOptions()
-        .placeholder(getProgressBarAsPlaceholder(context))
+        .placeholder(getProgressBarAsPlaceholder(this.context))
         .error(R.mipmap.ic_launcher_round)
 
     Glide.with(context)
@@ -23,4 +24,9 @@ fun getProgressBarAsPlaceholder(context: Context) : CircularProgressDrawable {
         centerRadius = 40f
         start()
     }
+}
+
+@BindingAdapter("android:downloadUrl") //Xml'de çalışır hale geldi
+fun downloadUrl(imageView: ImageView, url: String?) {
+    imageView.getImageFromUrl(url)
 }
